@@ -1,0 +1,25 @@
+function [p, g]= q3_logdf(x, y, sig, gamma, t)
+    p = @(t)-1/sig * sum((y' - t' * x').^2) -gamma * (t' * t);
+    exp(y' * t' * x')
+    
+    %     
+%     while index < 5000
+%         tNext = t;
+%         for nind = 1:4
+%             o = -1/sig * sum((y' - t' * x').^2) -gamma * (t' * t);
+%             for dir = [-1,1]
+%                 tNew = t;
+%                 tNew(nind) = t(nind) + gamma/100 * dir;
+%                 p = -1/sig * sum((y' - tNew' * x').^2) -gamma * (tNew' * tNew);
+% 
+%                 if p > o 
+%                    stem(index, p);
+%                    tNext(nind) = tNew(nind);
+%                    o = p;
+%                 end
+%             end
+%         end
+%         t = tNext;
+%         index = index + 1;
+%     end
+end
