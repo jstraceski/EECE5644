@@ -1,0 +1,3 @@
+function W = LDA(data, d)
+    
+end

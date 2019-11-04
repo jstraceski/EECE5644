@@ -1,0 +1,5 @@
+function val = OPT(W, b, x)
+    v = 1./(1 + exp((W' * x) + b));
+    1 - (max(v) - min(v));
+    val = (sum - 0.5).^2;
+end
