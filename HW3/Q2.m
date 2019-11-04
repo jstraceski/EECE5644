@@ -33,10 +33,10 @@ subplot(2,2,2);
 hold on
 [W, b] = LDA(trainX, trainD);
 
-nOPT = @(s)OPT(W * s, b, trainX);
+nOPT = @(s)OPT(W * s, b * s, trainX);
 x = fminsearch(nOPT, 1);
 % since the midpoint is already at y(x) = 0.5 an the W vector already
-% separates the data all we need to optimize is the scale of W.
+% separates the data all we need to optimize is the scale of W and b.
 
 f = @(xd)1./(1 + exp(((W * x)' * xd) + b));
 
