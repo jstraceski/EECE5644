@@ -3,9 +3,9 @@ syms x y f
 
 T = xlsread('Q1.csv');
 
-partA(T);
-partB(T);
-partC(T);
+% partA(T);
+% partB(T);
+% partC(T);
 partD(T);
 
 
@@ -116,21 +116,39 @@ function partD(T)
     roots = cell(7);
     errs = zeros(7, 1);
     ams = zeros(7, 1);
-    obvs = ones(length(trainT), 1) * 1/length(classes);
+    obvs = ones(length(trainT), 1); %* 1/length(trainT(:, 1));
 
     for n = 1:7
-        [samp idxs] = datasample(trainT, length(trainT(:, 1)), 'Weights', obvs);
+        
+        [samp, idxs] = datasample(trainT, length(trainT(:, 1)), 'Weights', obvs);
         root = genTree(classes, samp, tests);
         
         c = classify(root, samp);
-        err = sum((c ~= samp(:, 3)).*obvs) / sum(obvs);
-        am = log((1 - err)/err);
+        
+        errs2 = zeros(length(idxs), 1);
+        wts = zeros(length(idxs), 1);
         
         for i = 1:length(idxs)
             idx = idxs(i);
-            err = err + (c ~= samp(:, 3)).*obvs(idx) / sum(obvs);
-            disp(am * (c(i) ~= samp(i, 3)));
-            obvs(idx) = obvs(idx).*exp(am * (c(i) ~= samp(i, 3)));
+            errs2(i) = (c(i) ~= samp(i, 3)) * obvs(idx);
+            wts(i) = obvs(idx);
+        end
+        
+        err = sum(errs2)/sum(wts);
+        
+        am = 0;
+        if (err ~= 0)
+            am = log((1 - err)/err);
+        end
+        
+        for i = 1:length(idxs)
+            idx = idxs(i);
+            obvs(idx) = obvs(idx) * exp(am * (c(i) ~= samp(i, 3)));
+        end
+        
+        for i = 1:length(obvs)
+            obvs(i) = obvs(i)/sum(o;
+            obvs(idx) = obvs(idx) * exp(am * (c(i) ~= samp(i, 3)));
         end
         
         ams(n) = am;
@@ -138,6 +156,8 @@ function partD(T)
         errs(n) = err;
     end
     [~, idx] = min(errs);
+    
+    disp(errs);
     
     root = roots{idx};
     
@@ -392,9 +412,6 @@ function [m, out] = findLeaf(root, classes)
         end
     end
     
-    disp(leafs);
-    disp(impurity);
-    
     [m, idx] = max(impurity);
     out = leafs(idx);
 end
@@ -402,7 +419,7 @@ end
 function [o, v] = gain(e, classes, data, tests)
     syms x y f 
     
-    divs = 200;
+    divs = 400;
     
     sVal = min(data(:, 1:2), [], [1 2]);
     eVal = max(data(:, 1:2), [], [1 2]);
