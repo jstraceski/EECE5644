@@ -3,10 +3,10 @@ syms x y f
 
 T = xlsread('Q1.csv');
 
-% partA(T);
-% partB(T);
-% partC(T);
-partD(T);
+%partA(T);
+partB(T);
+partC(T);
+%partD(T);
 
 
 function partA(T)
@@ -29,7 +29,7 @@ function partB(T)
     testT = T(1:floor(len*0.1), :);
     trainT = T((floor(len*0.1) + 1):end, :);
     
-    tests = {@(x,y,f)x > f, @(x,y,f)y > f};
+    tests = {@(x,y,f)x > f, @(x,y,f)y > f,};
     o = genTree([-1 1], trainT, tests);
 
     figure(2);
